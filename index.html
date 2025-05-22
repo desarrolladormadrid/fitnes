@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador de Estadísticas de Fitness Hexagonal (Avanzado)</title>
+    <title>Analizador de Estadísticas de Fitness Hexagonal (Avanzado y Reactivo)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -91,20 +91,20 @@
                 <form id="statsForm" class="space-y-3">
                     <div>
                         <label for="athleteName" class="block text-sm font-medium text-gray-400">Nombre:</label>
-                        <input type="text" id="athleteName" value="Deportista X" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="text" id="athleteName" value="Deportista X" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="evalTitle" class="block text-sm font-medium text-gray-400">Evaluación:</label>
-                        <input type="text" id="evalTitle" value="Actual" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="text" id="evalTitle" value="Actual" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label for="age" class="block text-sm font-medium text-gray-400">Edad:</label>
-                            <input type="number" id="age" min="0" value="25" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                            <input type="number" id="age" min="0" value="25" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                         </div>
                         <div>
                             <label for="gender" class="block text-sm font-medium text-gray-400">Sexo:</label>
-                            <select id="gender" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                            <select id="gender" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                                 <option value="hombre">Hombre</option>
                                 <option value="mujer">Mujer</option>
                             </select>
@@ -113,44 +113,44 @@
                      <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label for="bodyWeight" class="block text-sm font-medium text-gray-400">Peso (kg):</label>
-                            <input type="number" id="bodyWeight" min="0" step="0.1" value="70" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                            <input type="number" id="bodyWeight" min="0" step="0.1" value="70" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                         </div>
                         <div>
                             <label for="heightCm" class="block text-sm font-medium text-gray-400">Altura (cm):</label>
-                            <input type="number" id="heightCm" min="0" value="175" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                            <input type="number" id="heightCm" min="0" value="175" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                         </div>
                     </div>
                     <div>
                         <label for="benchPress" class="block text-sm font-medium text-gray-400">Press Banca (kg):</label>
-                        <input type="number" id="benchPress" min="0" value="70" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="benchPress" min="0" value="70" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="squat" class="block text-sm font-medium text-gray-400">Sentadilla (kg):</label>
-                        <input type="number" id="squat" min="0" value="100" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="squat" min="0" value="100" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="deadlift" class="block text-sm font-medium text-gray-400">Peso Muerto (kg):</label>
-                        <input type="number" id="deadlift" min="0" value="120" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="deadlift" min="0" value="120" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="cardioTime" class="block text-sm font-medium text-gray-400">Cardio Semanal (min):</label>
-                        <input type="number" id="cardioTime" min="0" value="90" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="cardioTime" min="0" value="90" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="strengthDays" class="block text-sm font-medium text-gray-400">Días Fuerza/Sem (0-7):</label>
-                        <input type="number" id="strengthDays" min="0" max="7" value="3" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="strengthDays" min="0" max="7" value="3" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="sleepHours" class="block text-sm font-medium text-gray-400">Sueño/noche (h):</label>
-                        <input type="number" id="sleepHours" min="0" max="24" step="0.5" value="7" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="sleepHours" min="0" max="24" step="0.5" value="7" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="dietAdherence" class="block text-sm font-medium text-gray-400">Adherencia Dieta (1-10):</label>
-                        <input type="number" id="dietAdherence" min="1" max="10" value="7" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="dietAdherence" min="1" max="10" value="7" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                      <div>
                         <label for="mainGoal" class="block text-sm font-medium text-gray-400">Objetivo Principal:</label>
-                        <select id="mainGoal" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <select id="mainGoal" class="input-field mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                             <option value="muscleGain">Aumentar Masa Muscular</option>
                             <option value="fatLoss">Perder Grasa</option>
                         </select>
@@ -169,7 +169,7 @@
                     </div>
                     <div class="text-center p-2 stat-label-box rounded-lg flex flex-col justify-center">
                         <div class="text-gray-400 text-xs mb-0.5">TOTAL</div>
-                        <div id="totalScoreDisplay" class="total-score-number">70</div>
+                        <div id="totalScoreDisplay" class="total-score-number">70.0</div>
                         <div id="totalGradeDisplay" class="total-score-grade">B</div>
                     </div>
                     <div class="text-center p-2 stat-label-box rounded-lg flex flex-col justify-center">
@@ -210,7 +210,7 @@
 
         // Función para obtener la calificación en letra
         function getLetterGrade(score) {
-            const s = Math.round(score);
+            const s = Math.round(score); // La calificación se basa en el valor redondeado
             if (s >= 90) return 'S'; if (s >= 80) return 'A'; if (s >= 70) return 'B';
             if (s >= 60) return 'C'; if (s >= 50) return 'D'; if (s >= 40) return 'E';
             return 'G';
@@ -297,8 +297,8 @@
             }
 
             // Normalizar inputs para scores (0-100)
-            const scoreBench = normalize(benchPress, 20, 200); // Estos baremos son generales
-            const scoreSquat = normalize(squat, 30, 250);     // Podrían ajustarse por sexo en una v. futura
+            const scoreBench = normalize(benchPress, 20, 200); 
+            const scoreSquat = normalize(squat, 30, 250);     
             const scoreDeadlift = normalize(deadlift, 40, 300);
             const scoreCardioTime = normalize(cardioTime, 0, 360);
             const scoreStrengthDays = normalize(strengthDays, 0, 5);
@@ -313,14 +313,18 @@
             const RECUPERACION_SCORE = (scoreSleepHours * 0.6) + (scoreDietAdherence * 0.4);
             const DISCIPLINA_SCORE = (scoreStrengthDays * 0.35) + (scoreCardioTime * 0.3) + (scoreDietAdherence * 0.35);
             
-            const statsData = [FUERZA_SCORE, POTENCIA_SCORE, RESISTENCIA_SCORE, AGILIDAD_SCORE, RECUPERACION_SCORE, DISCIPLINA_SCORE].map(s => Math.round(Math.min(100, Math.max(0, s))));
-            const TOTAL = Math.round(statsData.reduce((a, b) => a + b, 0) / statsData.length);
+            // MODIFICADO: Mapear a statsData con un decimal
+            const statsData = [FUERZA_SCORE, POTENCIA_SCORE, RESISTENCIA_SCORE, AGILIDAD_SCORE, RECUPERACION_SCORE, DISCIPLINA_SCORE]
+                .map(s => Math.round(Math.min(100, Math.max(0, s)) * 10) / 10);
+            
+            // MODIFICADO: Calcular y mostrar TOTAL con un decimal
+            const unroundedTotal = statsData.reduce((a, b) => a + b, 0) / statsData.length;
+            document.getElementById('totalScoreDisplay').textContent = unroundedTotal.toFixed(1);
+            document.getElementById('totalGradeDisplay').textContent = getLetterGrade(unroundedTotal); // getLetterGrade usa Math.round internamente
 
             // Actualizar UI principal
             document.getElementById('displayAthleteName').textContent = athleteName.toUpperCase();
             document.getElementById('displayEvalTitle').textContent = evalTitle;
-            document.getElementById('totalScoreDisplay').textContent = TOTAL;
-            document.getElementById('totalGradeDisplay').textContent = getLetterGrade(TOTAL);
 
             // Configuración de la gráfica
             const chartDataConfig = {
@@ -347,9 +351,10 @@
                 },
                 plugins: {
                     legend: { display: false },
-                    tooltip: { enabled: true, callbacks: { label: ctx => `${ctx.dataset.label || ''}: ${Math.round(ctx.parsed.r * 100) / 100}` } },
+                    tooltip: { enabled: true, callbacks: { label: ctx => `${ctx.dataset.label || ''}: ${ctx.parsed.r.toFixed(1)}` } }, // Mostrar un decimal en tooltip
                     datalabels: {
-                        formatter: (val) => `${getLetterGrade(val)} ${Math.round(val)}`, color: '#FFFFFF',
+                        // MODIFICADO: Formateador de datalabels para mostrar un decimal
+                        formatter: (val) => `${getLetterGrade(val)} ${val.toFixed(1)}`, color: '#FFFFFF',
                         align: 'start', anchor: 'end', offset: 6,
                         font: { weight: 'bold', size: window.innerWidth < 768 ? 7 : 9 },
                         backgroundColor: 'rgba(0, 0, 0, 0.65)', borderRadius: 3,
@@ -367,11 +372,16 @@
 
         // Event listener para el formulario
         document.getElementById('statsForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            calculateStats();
+            event.preventDefault(); 
+            calculateStats(); 
         });
 
-        // Calcular y mostrar con valores por defecto al cargar la página
+        const allInputFields = document.querySelectorAll('.input-field');
+        allInputFields.forEach(field => {
+            const eventType = (field.type === 'text' || field.type === 'number') ? 'input' : 'change';
+            field.addEventListener(eventType, calculateStats);
+        });
+
         calculateStats();
     </script>
 </body>
