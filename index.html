@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador de Estadísticas de Fitness Hexagonal</title>
+    <title>Analizador de Estadísticas de Fitness Hexagonal (Avanzado)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -19,14 +19,14 @@
             border: 1px solid #4a5568; /* Tailwind gray-600 */
         }
         .total-score-number {
-            font-weight: 900; /* Extra bold */
-            font-size: 4rem; /* Larger size */
+            font-weight: 900;
+            font-size: 3.5rem;
             line-height: 1;
             color: #63b3ed; /* Tailwind blue-400 */
         }
         .total-score-grade {
             font-weight: 900;
-            font-size: 3rem;
+            font-size: 2.5rem;
             line-height: 1;
             color: #63b3ed; /* Tailwind blue-400 */
         }
@@ -42,258 +42,327 @@
         input[type="number"] {
             -moz-appearance: textfield;
         }
-        /* Chart.js responsive canvas */
         .chart-container {
             position: relative;
             margin: auto;
-            height: 60vh; /* Adjust as needed */
-            width: 90vw;  /* Adjust as needed */
-            max-width: 600px; /* Max width for larger screens */
-            max-height: 600px;
+            height: 50vh; /* Slightly reduced for more space below */
+            width: 90vw;
+            max-width: 500px; /* Slightly reduced */
+            max-height: 500px;
+        }
+        .bmi-info, .recommendation-section {
+            font-size: 0.85rem; /* Slightly larger for readability */
+        }
+        .recommendation-section h3 {
+            color: #63b3ed; /* Tailwind blue-400 */
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #4a5568;
+            padding-bottom: 0.25rem;
+        }
+        .recommendation-section ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .recommendation-section p {
+            margin-bottom: 0.5rem;
         }
 
         @media (max-width: 768px) {
             .chart-container {
-                height: 50vh;
+                height: 40vh;
             }
+            .total-score-number { font-size: 3rem; }
+            .total-score-grade { font-size: 2rem; }
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="container mx-auto max-w-6xl">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-sky-400">Analizador de Estadísticas de Fitness</h1>
+<body class="p-4 md:p-6">
+    <div class="container mx-auto max-w-7xl">
+        <header class="text-center mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-sky-400">Analizador de Fitness Avanzado</h1>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-            <div class="lg:col-span-1 p-6 stat-card rounded-lg shadow-xl">
-                <h2 class="text-2xl font-semibold mb-6 text-sky-400 border-b border-gray-700 pb-2">Ingresa tus Datos</h2>
-                <form id="statsForm" class="space-y-4">
+            <div class="lg:col-span-1 p-5 stat-card rounded-lg shadow-xl">
+                <h2 class="text-xl font-semibold mb-4 text-sky-400 border-b border-gray-700 pb-2">Ingresa tus Datos</h2>
+                <form id="statsForm" class="space-y-3">
                     <div>
-                        <label for="athleteName" class="block text-sm font-medium text-gray-400">Nombre del Atleta:</label>
-                        <input type="text" id="athleteName" value="Deportista X" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <label for="athleteName" class="block text-sm font-medium text-gray-400">Nombre:</label>
+                        <input type="text" id="athleteName" value="Deportista X" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
-                        <label for="evalTitle" class="block text-sm font-medium text-gray-400">Título de Evaluación:</label>
-                        <input type="text" id="evalTitle" value="Evaluación Actual" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <label for="evalTitle" class="block text-sm font-medium text-gray-400">Evaluación:</label>
+                        <input type="text" id="evalTitle" value="Actual" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="age" class="block text-sm font-medium text-gray-400">Edad:</label>
+                            <input type="number" id="age" min="0" value="25" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        </div>
+                        <div>
+                            <label for="gender" class="block text-sm font-medium text-gray-400">Sexo:</label>
+                            <select id="gender" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                                <option value="hombre">Hombre</option>
+                                <option value="mujer">Mujer</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="bodyWeight" class="block text-sm font-medium text-gray-400">Peso (kg):</label>
+                            <input type="number" id="bodyWeight" min="0" step="0.1" value="70" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        </div>
+                        <div>
+                            <label for="heightCm" class="block text-sm font-medium text-gray-400">Altura (cm):</label>
+                            <input type="number" id="heightCm" min="0" value="175" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        </div>
                     </div>
                     <div>
                         <label for="benchPress" class="block text-sm font-medium text-gray-400">Press Banca (kg):</label>
-                        <input type="number" id="benchPress" min="0" value="70" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="benchPress" min="0" value="70" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="squat" class="block text-sm font-medium text-gray-400">Sentadilla (kg):</label>
-                        <input type="number" id="squat" min="0" value="100" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="squat" min="0" value="100" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="deadlift" class="block text-sm font-medium text-gray-400">Peso Muerto (kg):</label>
-                        <input type="number" id="deadlift" min="0" value="120" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="deadlift" min="0" value="120" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
                         <label for="cardioTime" class="block text-sm font-medium text-gray-400">Cardio Semanal (min):</label>
-                        <input type="number" id="cardioTime" min="0" value="90" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <input type="number" id="cardioTime" min="0" value="90" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
                     <div>
-                        <label for="strengthDays" class="block text-sm font-medium text-gray-400">Días de Fuerza/Semana (0-7):</label>
-                        <input type="number" id="strengthDays" min="0" max="7" value="3" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                        <label for="strengthDays" class="block text-sm font-medium text-gray-400">Días Fuerza/Sem (0-7):</label>
+                        <input type="number" id="strengthDays" min="0" max="7" value="3" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
                     </div>
-                    <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ease-in-out">
-                        Generar Gráfica
+                    <div>
+                        <label for="sleepHours" class="block text-sm font-medium text-gray-400">Sueño/noche (h):</label>
+                        <input type="number" id="sleepHours" min="0" max="24" step="0.5" value="7" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div>
+                        <label for="dietAdherence" class="block text-sm font-medium text-gray-400">Adherencia Dieta (1-10):</label>
+                        <input type="number" id="dietAdherence" min="1" max="10" value="7" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                     <div>
+                        <label for="mainGoal" class="block text-sm font-medium text-gray-400">Objetivo Principal:</label>
+                        <select id="mainGoal" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-1.5 px-3 text-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                            <option value="muscleGain">Aumentar Masa Muscular</option>
+                            <option value="fatLoss">Perder Grasa</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ease-in-out mt-2 text-sm">
+                        Analizar y Recomendar
                     </button>
                 </form>
             </div>
 
-            <div class="lg:col-span-2 p-3 md:p-6 stat-card rounded-lg shadow-xl">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 items-center">
-                    <div class="md:col-span-1 text-center p-4 stat-label-box rounded-lg">
-                        <div id="displayAthleteName" class="text-2xl font-bold uppercase tracking-wider">DEPORTISTA X</div>
-                        <div id="displayEvalTitle" class="text-sm text-gray-400">Evaluación Actual</div>
+            <div class="lg:col-span-2 p-3 md:p-5 stat-card rounded-lg shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4 items-stretch">
+                    <div class="text-center p-2 stat-label-box rounded-lg flex flex-col justify-center">
+                        <div id="displayAthleteName" class="text-lg font-bold uppercase tracking-wider">DEPORTISTA X</div>
+                        <div id="displayEvalTitle" class="text-xs text-gray-400">Actual</div>
                     </div>
-                    <div class="md:col-span-1 text-center p-4 stat-label-box rounded-lg">
-                        <div class="text-gray-400 text-sm mb-1">TOTAL</div>
+                    <div class="text-center p-2 stat-label-box rounded-lg flex flex-col justify-center">
+                        <div class="text-gray-400 text-xs mb-0.5">TOTAL</div>
                         <div id="totalScoreDisplay" class="total-score-number">70</div>
                         <div id="totalGradeDisplay" class="total-score-grade">B</div>
                     </div>
-                     <div class="md:col-span-1 text-xs text-gray-400 p-2 stat-label-box rounded-lg">
-                        <h4 class="font-semibold mb-1 text-gray-300">Escala de Calificación:</h4>
-                        <p>S: 90-100, A: 80-89</p>
-                        <p>B: 70-79, C: 60-69</p>
-                        <p>D: 50-59, E: 40-49</p>
-                        <p>G: 0-39 (Originalmente F: 30-39, G: 0-29. Simplificado a G: 0-39)</p>
+                    <div class="text-center p-2 stat-label-box rounded-lg flex flex-col justify-center">
+                        <div class="text-gray-400 text-xs mb-0.5">IMC</div>
+                        <div id="bmiDisplay" class="text-2xl font-bold text-sky-400">22.9</div>
+                        <div id="bmiCategoryDisplay" class="text-xs text-gray-300">Normal</div>
+                    </div>
+                     <div class="text-xs text-gray-400 p-2 stat-label-box rounded-lg bmi-info flex flex-col justify-center">
+                        <h4 class="font-semibold mb-0.5 text-gray-300 text-sm">Escala:</h4>
+                        <p class="leading-tight">S:90-100, A:80-89, B:70-79, C:60-69, D:50-59, E:40-49, G:0-39</p>
+                        <h4 class="font-semibold mt-0.5 mb-0.5 text-gray-300 text-sm">IMC:</h4>
+                        <p class="leading-tight">&lt;18.5 Bajo, 18.5-24.9 Norm, 25-29.9 Sobrep, &ge;30 Obes.</p>
                     </div>
                 </div>
 
-                <div class="chart-container">
+                <div class="chart-container mb-4">
                     <canvas id="statsChart"></canvas>
                 </div>
+                
+                <div id="recommendationsDisplay" class="mt-4 p-3 stat-label-box rounded-lg recommendation-section">
+                    </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Registra el plugin de datalabels globalmente
         Chart.register(ChartDataLabels);
-
         const ctx = document.getElementById('statsChart').getContext('2d');
         let statsChart;
 
         // Función para normalizar valores a una escala de 0-100
-        function normalize(value, minVal, maxValFor100) {
-            if (maxValFor100 === minVal) return value >= maxValFor100 ? 100 : 0; // Evitar división por cero
-            const normalized = ((value - minVal) / (maxValFor100 - minVal)) * 100;
-            return Math.min(100, Math.max(0, normalized));
+        function normalize(value, minVal, maxValFor100, invert = false) {
+            if (maxValFor100 === minVal) return value >= maxValFor100 ? (invert ? 0 : 100) : (invert ? 100 : 0);
+            let normalized = ((value - minVal) / (maxValFor100 - minVal)) * 100;
+            normalized = Math.min(100, Math.max(0, normalized));
+            return invert ? 100 - normalized : normalized;
         }
 
         // Función para obtener la calificación en letra
         function getLetterGrade(score) {
             const s = Math.round(score);
-            if (s >= 90) return 'S';
-            if (s >= 80) return 'A';
-            if (s >= 70) return 'B';
-            if (s >= 60) return 'C';
-            if (s >= 50) return 'D';
-            if (s >= 40) return 'E';
-            return 'G'; // G para 0-39
+            if (s >= 90) return 'S'; if (s >= 80) return 'A'; if (s >= 70) return 'B';
+            if (s >= 60) return 'C'; if (s >= 50) return 'D'; if (s >= 40) return 'E';
+            return 'G';
+        }
+        
+        // Función para obtener categoría de IMC
+        function getBmiCategory(bmi) {
+            if (bmi < 18.5) return 'Bajo peso'; if (bmi < 25) return 'Normal';
+            if (bmi < 30) return 'Sobrepeso'; return 'Obesidad';
         }
 
-        // Función para calcular estadísticas y actualizar la UI
+        // Función para generar recomendaciones
+        function generateRecommendations(goal, gender, bmi, strengthDays, cardioTime) {
+            let dietRec = "";
+            let exerciseRec = "";
+            const disclaimer = "<p class='mt-3 text-xs text-gray-500'>Nota: Estas son recomendaciones generales. Consulta a un nutricionista y entrenador personal para un plan adaptado a tus necesidades específicas.</p>";
+
+            if (goal === "muscleGain") {
+                dietRec = `<h3>Recomendaciones de Dieta (Ganar Músculo)</h3>
+                    <ul>
+                        <li><strong>Superávit Calórico Ligero:</strong> Consume un poco más de calorías de las que gastas (ej. 250-500 kcal extra/día).</li>
+                        <li><strong>Alta Ingesta de Proteínas:</strong> Prioriza fuentes de proteína magra (ej. 1.6-2.2g por kg de peso corporal).</li>
+                        <li><strong>Carbohidratos Adecuados:</strong> Para energía en tus entrenamientos y recuperación (ej. frutas, verduras, granos integrales).</li>
+                        <li><strong>Grasas Saludables:</strong> Importantes para funciones hormonales (ej. aguacate, frutos secos, aceite de oliva).</li>
+                        <li><strong>Hidratación:</strong> Bebe suficiente agua a lo largo del día.</li>
+                    </ul>`;
+                exerciseRec = `<h3>Recomendaciones de Ejercicio (Ganar Músculo)</h3>
+                    <ul>
+                        <li><strong>Entrenamiento de Fuerza (Hipertrofia):</strong> ${strengthDays > 1 ? strengthDays : 'Al menos 3-5'} días/semana. Enfócate en rangos de 6-12 repeticiones por serie.</li>
+                        <li><strong>Ejercicios Compuestos:</strong> Prioriza sentadillas, peso muerto, press de banca, remos, press militar.</li>
+                        <li><strong>Sobrecarga Progresiva:</strong> Aumenta gradualmente el peso, las repeticiones o las series.</li>
+                        <li><strong>Descanso y Recuperación:</strong> Duerme bien y permite que tus músculos se recuperen entre sesiones.</li>
+                        <li><strong>Cardio Moderado:</strong> ${cardioTime > 0 ? cardioTime + ' min/sem. ' : ''}2-3 sesiones ligeras/moderadas por semana pueden ayudar sin interferir demasiado.</li>
+                    </ul>`;
+            } else if (goal === "fatLoss") {
+                dietRec = `<h3>Recomendaciones de Dieta (Perder Grasa)</h3>
+                    <ul>
+                        <li><strong>Déficit Calórico Controlado:</strong> Consume menos calorías de las que gastas (ej. 300-600 kcal menos/día).</li>
+                        <li><strong>Proteína Alta:</strong> Para preservar masa muscular durante el déficit (ej. 1.8-2.5g por kg de peso corporal).</li>
+                        <li><strong>Control de Carbohidratos y Grasas:</strong> Ajusta según tus preferencias, priorizando fuentes de calidad.</li>
+                        <li><strong>Alimentos Integrales y Fibra:</strong> Aumentan la saciedad (ej. verduras, frutas, legumbres).</li>
+                        <li><strong>Evita Azúcares Añadidos y Procesados:</strong> Limita calorías vacías.</li>
+                        <li><strong>Hidratación:</strong> Fundamental, y puede ayudar con la sensación de hambre.</li>
+                    </ul>`;
+                exerciseRec = `<h3>Recomendaciones de Ejercicio (Perder Grasa)</h3>
+                    <ul>
+                        <li><strong>Entrenamiento de Fuerza:</strong> ${strengthDays > 1 ? strengthDays : 'Al menos 2-4'} días/semana para mantener músculo.</li>
+                        <li><strong>Cardiovascular:</strong> ${cardioTime > 0 ? cardioTime + ' min/sem. ' : ''}Combina sesiones de intensidad moderada (LISS) y alta intensidad (HIIT). Intenta al menos 150-300 min/semana.</li>
+                        <li><strong>Aumenta Actividad Diaria (NEAT):</strong> Camina más, usa escaleras, etc.</li>
+                        <li><strong>Consistencia:</strong> La clave es la adherencia a largo plazo.</li>
+                    </ul>`;
+            }
+            document.getElementById('recommendationsDisplay').innerHTML = dietRec + exerciseRec + disclaimer;
+        }
+
+        // Función principal para calcular estadísticas y actualizar UI
         function calculateStats() {
-            // Obtener valores de los inputs
             const athleteName = document.getElementById('athleteName').value || "Deportista X";
-            const evalTitle = document.getElementById('evalTitle').value || "Evaluación Actual";
+            const evalTitle = document.getElementById('evalTitle').value || "Actual";
+            const age = parseFloat(document.getElementById('age').value) || 25;
+            const gender = document.getElementById('gender').value;
+            const bodyWeight = parseFloat(document.getElementById('bodyWeight').value) || 0;
+            const heightCm = parseFloat(document.getElementById('heightCm').value) || 0;
+            
             const benchPress = parseFloat(document.getElementById('benchPress').value) || 0;
             const squat = parseFloat(document.getElementById('squat').value) || 0;
             const deadlift = parseFloat(document.getElementById('deadlift').value) || 0;
             const cardioTime = parseFloat(document.getElementById('cardioTime').value) || 0;
             const strengthDays = parseFloat(document.getElementById('strengthDays').value) || 0;
+            const sleepHours = parseFloat(document.getElementById('sleepHours').value) || 0;
+            const dietAdherence = parseFloat(document.getElementById('dietAdherence').value) || 0;
+            const mainGoal = document.getElementById('mainGoal').value;
 
-            // Normalizar inputs básicos
-            // Para levantamientos, consideramos:
-            // Bench: 20kg (mínimo para puntuar) - 200kg (para 100 pts)
-            // Squat: 30kg (mínimo para puntuar) - 250kg (para 100 pts)
-            // Deadlift: 40kg (mínimo para puntuar) - 300kg (para 100 pts)
-            const scoreBench = normalize(benchPress, 20, 200);
-            const scoreSquat = normalize(squat, 30, 250);
+            // Calcular BMI
+            let bmi = 0;
+            if (bodyWeight > 0 && heightCm > 0) {
+                const heightM = heightCm / 100;
+                bmi = bodyWeight / (heightM * heightM);
+                document.getElementById('bmiDisplay').textContent = bmi.toFixed(1);
+                document.getElementById('bmiCategoryDisplay').textContent = getBmiCategory(bmi);
+            } else {
+                document.getElementById('bmiDisplay').textContent = "N/A";
+                document.getElementById('bmiCategoryDisplay').textContent = "N/A";
+            }
+
+            // Normalizar inputs para scores (0-100)
+            const scoreBench = normalize(benchPress, 20, 200); // Estos baremos son generales
+            const scoreSquat = normalize(squat, 30, 250);     // Podrían ajustarse por sexo en una v. futura
             const scoreDeadlift = normalize(deadlift, 40, 300);
-
-            // Cardio: 0 min (0 pts) - 300 min (5h, para 100 pts)
-            const scoreCardioTime = normalize(cardioTime, 0, 300);
-            
-            // Días de fuerza: 0 días (0 pts) - 5+ días (para 100 pts)
+            const scoreCardioTime = normalize(cardioTime, 0, 360);
             const scoreStrengthDays = normalize(strengthDays, 0, 5);
+            const scoreSleepHours = normalize(sleepHours, 4, 9);
+            const scoreDietAdherence = normalize(dietAdherence, 1, 10);
 
             // Calcular las 6 estadísticas principales (0-100)
-            const FUERZA = (scoreBench + scoreSquat + scoreDeadlift) / 3;
-            const POTENCIA = FUERZA * 0.85 + scoreStrengthDays * 0.15; // Más peso a fuerza
-            const RES_MUSCULAR = scoreStrengthDays * 0.5 + FUERZA * 0.25 + scoreCardioTime * 0.25;
-            const RES_CARDIO = scoreCardioTime;
-            const VELOCIDAD = scoreCardioTime * 0.45 + FUERZA * 0.30 + scoreStrengthDays * 0.25; // Cardio y fuerza aportan, más días de entreno
-            const DISCIPLINA = scoreStrengthDays * 0.6 + scoreCardioTime * 0.4; // Constancia en gym y cardio
-
-            const statsData = [FUERZA, POTENCIA, RES_MUSCULAR, RES_CARDIO, VELOCIDAD, DISCIPLINA].map(s => Math.round(Math.min(100, Math.max(0, s))));
-
-            // Calcular TOTAL
+            const FUERZA_SCORE = (scoreBench + scoreSquat + scoreDeadlift) / 3;
+            const POTENCIA_SCORE = FUERZA_SCORE * 0.8 + scoreStrengthDays * 0.2;
+            const RESISTENCIA_SCORE = (scoreCardioTime * 0.5) + (scoreStrengthDays * 0.3) + (FUERZA_SCORE * 0.2);
+            const AGILIDAD_SCORE = (scoreCardioTime * 0.4) + (scoreStrengthDays * 0.3) + (scoreSleepHours * 0.3);
+            const RECUPERACION_SCORE = (scoreSleepHours * 0.6) + (scoreDietAdherence * 0.4);
+            const DISCIPLINA_SCORE = (scoreStrengthDays * 0.35) + (scoreCardioTime * 0.3) + (scoreDietAdherence * 0.35);
+            
+            const statsData = [FUERZA_SCORE, POTENCIA_SCORE, RESISTENCIA_SCORE, AGILIDAD_SCORE, RECUPERACION_SCORE, DISCIPLINA_SCORE].map(s => Math.round(Math.min(100, Math.max(0, s))));
             const TOTAL = Math.round(statsData.reduce((a, b) => a + b, 0) / statsData.length);
 
-            // Actualizar UI
-            document.getElementById('displayAthleteName').textContent = athleteName;
+            // Actualizar UI principal
+            document.getElementById('displayAthleteName').textContent = athleteName.toUpperCase();
             document.getElementById('displayEvalTitle').textContent = evalTitle;
             document.getElementById('totalScoreDisplay').textContent = TOTAL;
             document.getElementById('totalGradeDisplay').textContent = getLetterGrade(TOTAL);
 
-            // Actualizar o crear gráfica
-            const chartData = {
-                labels: ['FUERZA', 'POTENCIA', 'RES. MUSC.', 'RES. CARDIO', 'VELOCIDAD', 'DISCIPLINA'],
+            // Configuración de la gráfica
+            const chartDataConfig = {
+                labels: ['FUERZA', 'POTENCIA', 'RESIST.', 'AGILIDAD', 'RECUP.', 'DISCIPLINA'],
                 datasets: [{
-                    label: athleteName,
-                    data: statsData,
-                    fill: true,
-                    backgroundColor: 'rgba(54, 162, 235, 0.3)', // Azul claro con transparencia
-                    borderColor: 'rgb(54, 162, 235)', // Azul
-                    pointBackgroundColor: 'rgb(54, 162, 235)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(54, 162, 235)',
-                    borderWidth: 2,
-                    pointRadius: 5,
+                    label: athleteName, data: statsData, fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.35)', borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)', pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgb(54, 162, 235)',
+                    borderWidth: 2, pointRadius: 3,
                 }]
             };
-
-            const chartConfig = {
-                type: 'radar',
-                data: chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    elements: {
-                        line: {
-                            borderWidth: 3
-                        }
-                    },
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
-                            grid: { color: 'rgba(255, 255, 255, 0.2)' },
-                            pointLabels: {
-                                font: {
-                                    size: window.innerWidth < 768 ? 9 : 13, // Tamaño de fuente responsivo
-                                    weight: 'bold'
-                                },
-                                color: '#cbd5e1' // Tailwind gray-400
-                            },
-                            ticks: {
-                                color: '#a0aec0', // Tailwind gray-500
-                                backdropColor: 'rgba(45, 55, 72, 0.75)', // Tailwind gray-700 con opacidad
-                                stepSize: 20,
-                                font: { size: 10 }
-                            },
-                            min: 0,
-                            max: 100
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                           display: false // Ocultar leyenda si solo hay un dataset
-                        },
-                        tooltip: {
-                            enabled: true,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.r !== null) {
-                                        label += Math.round(context.parsed.r * 100) / 100;
-                                    }
-                                    return label;
-                                }
-                            }
-                        },
-                        datalabels: { // Configuración para chartjs-plugin-datalabels
-                            formatter: (value, context) => {
-                                return getLetterGrade(value) + ' ' + Math.round(value);
-                            },
-                            color: '#FFFFFF', // Color del texto de la etiqueta
-                            align: 'start',
-                            anchor: 'end',
-                            offset: 8, // Distancia desde el punto
-                            font: {
-                                weight: 'bold',
-                                size: window.innerWidth < 768 ? 9 : 11,
-                            },
-                            backgroundColor: 'rgba(0, 0, 0, 0.6)', // Fondo semi-transparente
-                            borderRadius: 4,
-                            padding: { top: 3, bottom: 2, left: 4, right: 4 }
-                        }
+            const chartConfigOptions = {
+                responsive: true, maintainAspectRatio: false,
+                elements: { line: { borderWidth: 2 } },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.25)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.25)' },
+                        pointLabels: { font: { size: window.innerWidth < 768 ? 7 : 11, weight: 'bold' }, color: '#cbd5e1' },
+                        ticks: { color: '#a0aec0', backdropColor: 'rgba(45, 55, 72, 0.8)', stepSize: 20, font: { size: 8 } },
+                        min: 0, max: 100
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true, callbacks: { label: ctx => `${ctx.dataset.label || ''}: ${Math.round(ctx.parsed.r * 100) / 100}` } },
+                    datalabels: {
+                        formatter: (val) => `${getLetterGrade(val)} ${Math.round(val)}`, color: '#FFFFFF',
+                        align: 'start', anchor: 'end', offset: 6,
+                        font: { weight: 'bold', size: window.innerWidth < 768 ? 7 : 9 },
+                        backgroundColor: 'rgba(0, 0, 0, 0.65)', borderRadius: 3,
+                        padding: { top: 2, bottom: 1, left: 3, right: 3 }
                     }
                 }
             };
 
-            if (statsChart) {
-                statsChart.destroy();
-            }
-            statsChart = new Chart(ctx, chartConfig);
+            if (statsChart) { statsChart.destroy(); }
+            statsChart = new Chart(ctx, { type: 'radar', data: chartDataConfig, options: chartConfigOptions });
+
+            // Generar y mostrar recomendaciones
+            generateRecommendations(mainGoal, gender, bmi, strengthDays, cardioTime);
         }
 
         // Event listener para el formulario
