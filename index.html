@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador de Estadísticas de Fitness Hexagonal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Tailwind gray-900 */
+            color: #e2e8f0; /* Tailwind gray-300 */
+        }
+        .stat-card {
+            background-color: #2d3748; /* Tailwind gray-800 */
+            border: 1px solid #4a5568; /* Tailwind gray-600 */
+        }
+        .total-score-number {
+            font-weight: 900; /* Extra bold */
+            font-size: 4rem; /* Larger size */
+            line-height: 1;
+            color: #63b3ed; /* Tailwind blue-400 */
+        }
+        .total-score-grade {
+            font-weight: 900;
+            font-size: 3rem;
+            line-height: 1;
+            color: #63b3ed; /* Tailwind blue-400 */
+        }
+        .stat-label-box {
+            background-color: #4a5568; /* Tailwind gray-600 */
+            color: #e2e8f0; /* Tailwind gray-300 */
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        /* Chart.js responsive canvas */
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 60vh; /* Adjust as needed */
+            width: 90vw;  /* Adjust as needed */
+            max-width: 600px; /* Max width for larger screens */
+            max-height: 600px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="container mx-auto max-w-6xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-sky-400">Analizador de Estadísticas de Fitness</h1>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+            <div class="lg:col-span-1 p-6 stat-card rounded-lg shadow-xl">
+                <h2 class="text-2xl font-semibold mb-6 text-sky-400 border-b border-gray-700 pb-2">Ingresa tus Datos</h2>
+                <form id="statsForm" class="space-y-4">
+                    <div>
+                        <label for="athleteName" class="block text-sm font-medium text-gray-400">Nombre del Atleta:</label>
+                        <input type="text" id="athleteName" value="Deportista X" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div>
+                        <label for="evalTitle" class="block text-sm font-medium text-gray-400">Título de Evaluación:</label>
+                        <input type="text" id="evalTitle" value="Evaluación Actual" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div>
+                        <label for="benchPress" class="block text-sm font-medium text-gray-400">Press Banca (kg):</label>
+                        <input type="number" id="benchPress" min="0" value="70" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div>
+                        <label for="squat" class="block text-sm font-medium text-gray-400">Sentadilla (kg):</label>
+                        <input type="number" id="squat" min="0" value="100" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div>
+                        <label for="deadlift" class="block text-sm font-medium text-gray-400">Peso Muerto (kg):</label>
+                        <input type="number" id="deadlift" min="0" value="120" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div>
+                        <label for="cardioTime" class="block text-sm font-medium text-gray-400">Cardio Semanal (min):</label>
+                        <input type="number" id="cardioTime" min="0" value="90" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <div>
+                        <label for="strengthDays" class="block text-sm font-medium text-gray-400">Días de Fuerza/Semana (0-7):</label>
+                        <input type="number" id="strengthDays" min="0" max="7" value="3" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 text-gray-200">
+                    </div>
+                    <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ease-in-out">
+                        Generar Gráfica
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 p-3 md:p-6 stat-card rounded-lg shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 items-center">
+                    <div class="md:col-span-1 text-center p-4 stat-label-box rounded-lg">
+                        <div id="displayAthleteName" class="text-2xl font-bold uppercase tracking-wider">DEPORTISTA X</div>
+                        <div id="displayEvalTitle" class="text-sm text-gray-400">Evaluación Actual</div>
+                    </div>
+                    <div class="md:col-span-1 text-center p-4 stat-label-box rounded-lg">
+                        <div class="text-gray-400 text-sm mb-1">TOTAL</div>
+                        <div id="totalScoreDisplay" class="total-score-number">70</div>
+                        <div id="totalGradeDisplay" class="total-score-grade">B</div>
+                    </div>
+                     <div class="md:col-span-1 text-xs text-gray-400 p-2 stat-label-box rounded-lg">
+                        <h4 class="font-semibold mb-1 text-gray-300">Escala de Calificación:</h4>
+                        <p>S: 90-100, A: 80-89</p>
+                        <p>B: 70-79, C: 60-69</p>
+                        <p>D: 50-59, E: 40-49</p>
+                        <p>G: 0-39 (Originalmente F: 30-39, G: 0-29. Simplificado a G: 0-39)</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="statsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Registra el plugin de datalabels globalmente
+        Chart.register(ChartDataLabels);
+
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        let statsChart;
+
+        // Función para normalizar valores a una escala de 0-100
+        function normalize(value, minVal, maxValFor100) {
+            if (maxValFor100 === minVal) return value >= maxValFor100 ? 100 : 0; // Evitar división por cero
+            const normalized = ((value - minVal) / (maxValFor100 - minVal)) * 100;
+            return Math.min(100, Math.max(0, normalized));
+        }
+
+        // Función para obtener la calificación en letra
+        function getLetterGrade(score) {
+            const s = Math.round(score);
+            if (s >= 90) return 'S';
+            if (s >= 80) return 'A';
+            if (s >= 70) return 'B';
+            if (s >= 60) return 'C';
+            if (s >= 50) return 'D';
+            if (s >= 40) return 'E';
+            return 'G'; // G para 0-39
+        }
+
+        // Función para calcular estadísticas y actualizar la UI
+        function calculateStats() {
+            // Obtener valores de los inputs
+            const athleteName = document.getElementById('athleteName').value || "Deportista X";
+            const evalTitle = document.getElementById('evalTitle').value || "Evaluación Actual";
+            const benchPress = parseFloat(document.getElementById('benchPress').value) || 0;
+            const squat = parseFloat(document.getElementById('squat').value) || 0;
+            const deadlift = parseFloat(document.getElementById('deadlift').value) || 0;
+            const cardioTime = parseFloat(document.getElementById('cardioTime').value) || 0;
+            const strengthDays = parseFloat(document.getElementById('strengthDays').value) || 0;
+
+            // Normalizar inputs básicos
+            // Para levantamientos, consideramos:
+            // Bench: 20kg (mínimo para puntuar) - 200kg (para 100 pts)
+            // Squat: 30kg (mínimo para puntuar) - 250kg (para 100 pts)
+            // Deadlift: 40kg (mínimo para puntuar) - 300kg (para 100 pts)
+            const scoreBench = normalize(benchPress, 20, 200);
+            const scoreSquat = normalize(squat, 30, 250);
+            const scoreDeadlift = normalize(deadlift, 40, 300);
+
+            // Cardio: 0 min (0 pts) - 300 min (5h, para 100 pts)
+            const scoreCardioTime = normalize(cardioTime, 0, 300);
+            
+            // Días de fuerza: 0 días (0 pts) - 5+ días (para 100 pts)
+            const scoreStrengthDays = normalize(strengthDays, 0, 5);
+
+            // Calcular las 6 estadísticas principales (0-100)
+            const FUERZA = (scoreBench + scoreSquat + scoreDeadlift) / 3;
+            const POTENCIA = FUERZA * 0.85 + scoreStrengthDays * 0.15; // Más peso a fuerza
+            const RES_MUSCULAR = scoreStrengthDays * 0.5 + FUERZA * 0.25 + scoreCardioTime * 0.25;
+            const RES_CARDIO = scoreCardioTime;
+            const VELOCIDAD = scoreCardioTime * 0.45 + FUERZA * 0.30 + scoreStrengthDays * 0.25; // Cardio y fuerza aportan, más días de entreno
+            const DISCIPLINA = scoreStrengthDays * 0.6 + scoreCardioTime * 0.4; // Constancia en gym y cardio
+
+            const statsData = [FUERZA, POTENCIA, RES_MUSCULAR, RES_CARDIO, VELOCIDAD, DISCIPLINA].map(s => Math.round(Math.min(100, Math.max(0, s))));
+
+            // Calcular TOTAL
+            const TOTAL = Math.round(statsData.reduce((a, b) => a + b, 0) / statsData.length);
+
+            // Actualizar UI
+            document.getElementById('displayAthleteName').textContent = athleteName;
+            document.getElementById('displayEvalTitle').textContent = evalTitle;
+            document.getElementById('totalScoreDisplay').textContent = TOTAL;
+            document.getElementById('totalGradeDisplay').textContent = getLetterGrade(TOTAL);
+
+            // Actualizar o crear gráfica
+            const chartData = {
+                labels: ['FUERZA', 'POTENCIA', 'RES. MUSC.', 'RES. CARDIO', 'VELOCIDAD', 'DISCIPLINA'],
+                datasets: [{
+                    label: athleteName,
+                    data: statsData,
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.3)', // Azul claro con transparencia
+                    borderColor: 'rgb(54, 162, 235)', // Azul
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)',
+                    borderWidth: 2,
+                    pointRadius: 5,
+                }]
+            };
+
+            const chartConfig = {
+                type: 'radar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                            pointLabels: {
+                                font: {
+                                    size: window.innerWidth < 768 ? 9 : 13, // Tamaño de fuente responsivo
+                                    weight: 'bold'
+                                },
+                                color: '#cbd5e1' // Tailwind gray-400
+                            },
+                            ticks: {
+                                color: '#a0aec0', // Tailwind gray-500
+                                backdropColor: 'rgba(45, 55, 72, 0.75)', // Tailwind gray-700 con opacidad
+                                stepSize: 20,
+                                font: { size: 10 }
+                            },
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                           display: false // Ocultar leyenda si solo hay un dataset
+                        },
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        label += Math.round(context.parsed.r * 100) / 100;
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        datalabels: { // Configuración para chartjs-plugin-datalabels
+                            formatter: (value, context) => {
+                                return getLetterGrade(value) + ' ' + Math.round(value);
+                            },
+                            color: '#FFFFFF', // Color del texto de la etiqueta
+                            align: 'start',
+                            anchor: 'end',
+                            offset: 8, // Distancia desde el punto
+                            font: {
+                                weight: 'bold',
+                                size: window.innerWidth < 768 ? 9 : 11,
+                            },
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)', // Fondo semi-transparente
+                            borderRadius: 4,
+                            padding: { top: 3, bottom: 2, left: 4, right: 4 }
+                        }
+                    }
+                }
+            };
+
+            if (statsChart) {
+                statsChart.destroy();
+            }
+            statsChart = new Chart(ctx, chartConfig);
+        }
+
+        // Event listener para el formulario
+        document.getElementById('statsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            calculateStats();
+        });
+
+        // Calcular y mostrar con valores por defecto al cargar la página
+        calculateStats();
+    </script>
+</body>
+</html>
